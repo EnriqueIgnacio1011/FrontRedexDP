@@ -375,7 +375,75 @@
       regresarAlListar(){
         console.log('listadoPaquetes llamado');
         this.$router.push('listadoPaquetes');
+      },
+      /*
+      {
+    "idEnvio": "15",
+    "ciudadOrigen": "Sevilla",
+    "ciudadDestino": "Lima",
+    "ciudadActual": "Lima",
+    "fechaEnvio": "20240803",
+    "horaEnvio": "15:00",
+    "cantidadPaquetes": 4,
+    "estadoEnvio": "aa",
+    "coordinates": null,
+    "ruta": null
+}
+*/
+      async registrarEnvio() {
+        try {
+          const payload = {
+            ciudadOrigen: this.clienteOrigen.ciudadPais,
+            ciudadDestino: this.clienteDestino.ciudadPais,
+            ciudadActual: this.clienteOrigen.ciudadPais,
+            //descripcionPaquete: this.descripcionPaquete,
+            cantidadPaquetes: this.cantidadPaquetes
+          };
+
+          // Llamada a la API
+          const response = await axios.post('http://localhost/api/paquete/register', payload);
+
+          // Suponiendo que la respuesta tiene un campo `success` para indicar éxito
+          //if (response.data.success) {
+          if (response.data !== 0){
+            console.log('Envío registrado exitosamente:', response.data);
+            this.$toast.success('El envío se ha registrado exitosamente.');
+            // Muestra una notificación de éxito
+            /*
+            this.$notify({
+              component: NotificationTemplatePaqueteSuccess,
+              horizontalAlign: 'center',
+              verticalAlign: 'top',
+            });
+            */
+            // Navega a la página de resumen del envío
+            this.$router.push({ name: 'ResumenEnvio', params: { idEnvio: response.data } });
+          } else {
+            console.error('Error en la respuesta:', response.data);
+            // Muestra una notificación de error
+            this.$toast.error('Hubo un error al registrar el envío.');
+            /*
+            this.$notify({
+              component: NotificationTemplatePaqueteError,
+              horizontalAlign: 'center',
+              verticalAlign: 'top',
+            });
+            */
+          }
+        } catch (error) {
+          console.error('Error al registrar el envío: ', error);
+          // Muestra una notificación de error
+          this.$toast.error('Hubo un error al registrar el envío.');
+          /*
+          this.$notify({
+            component: NotificationTemplatePaqueteError,
+            horizontalAlign: 'center',
+            verticalAlign: 'top',
+          });
+          */
+        }
       }
+
     },
     props: {
 

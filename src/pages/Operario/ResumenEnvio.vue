@@ -5,7 +5,7 @@
     <div class="summary-section">
       <div class="section">
         <h2>Datos del Envío</h2>
-        <p><span class="highlighted-code">Código de Envío:</span> <span class="highlighted-code"> FAS44A5S</span></p>
+        <p><span class="highlighted-code">Código de Envío:</span> <span class="highlighted-code"> {{ id }}</span></p>
         <p><strong>Ciudad, País - Origen:</strong> Lima - Perú</p>
         <p><strong>Ciudad, País - Destino:</strong> Madrid - España</p>
         <p><strong>Cantidad de Paquetes:</strong> 10</p>
@@ -46,9 +46,16 @@ export default {
   components: {
     PopupConfirmation
   },
+  props:{
+    idEnvio: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
-      showModal: false
+      showModal: false,
+      envio: null // Inicializa los datos del envío
     }
   },
   methods: {
