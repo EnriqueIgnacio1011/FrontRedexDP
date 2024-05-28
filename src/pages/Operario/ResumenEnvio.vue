@@ -5,11 +5,14 @@
     <div class="summary-section">
       <div class="section">
         <h2>Datos del Envío</h2>
-        <p><span class="highlighted-code">Código de Envío:</span> <span class="highlighted-code"> {{ id }}</span></p>
-        <p><strong>Ciudad, País - Origen:</strong> Lima - Perú</p>
-        <p><strong>Ciudad, País - Destino:</strong> Madrid - España</p>
-        <p><strong>Cantidad de Paquetes:</strong> 10</p>
-        <p><strong>Descripción:</strong> Documentos importantes</p>
+        <p><span class="highlighted-code">Código de Envío:</span> <span class="highlighted-code"> {{ envio.id }}</span></p>
+        <p><strong>Ciudad, País - Origen:</strong> {{ envio.ciudadOrigen }}</p>
+        <p><strong>Ciudad, País - Destino:</strong> {{ envio.ciudadDestino }}</p>
+        <p><strong>Fecha de Envío:</strong> 28-05-2024 </p>
+        <p><strong>Hora de Envío:</strong> {{ envio.horaEnvio }}</p>
+        <p><strong>Cantidad de Paquetes:</strong> {{ envio.cantidadPaquetes }} unidades</p>
+        <p><strong>Estado del Envío:</strong> En Almacén</p>
+        <!--<p><strong>Descripción:</strong> Documentos importantes</p>-->
       </div>
       <div class="section">
         <h2>Datos del Contacto que Envía</h2>
@@ -43,19 +46,13 @@ import PopupConfirmation from "@/components/PopupConfirmation.vue"; // Asegúrat
 
 export default {
   name: 'ResumenEnvio',
+  props: ['envio'], // Declaración de la prop `envio`
   components: {
     PopupConfirmation
-  },
-  props:{
-    idEnvio: {
-      type: String,
-      required: true
-    }
   },
   data() {
     return {
       showModal: false,
-      envio: null // Inicializa los datos del envío
     }
   },
   methods: {

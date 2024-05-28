@@ -973,7 +973,7 @@
     "webpack" "^4.0.0"
     "workbox-webpack-plugin" "^3.6.3"
 
-"@vue/cli-service@^3.4.0":
+"@vue/cli-service@^3.12.1":
   "integrity" "sha512-PDxNrTGnSKzeV1ruFlsRIAO8JcPizwT0EJXq9GeyooU+p+sOkv7aKkCBJQVYNjZapD1NOGWx6CvAAC/wAW+gew=="
   "resolved" "https://registry.npmjs.org/@vue/cli-service/-/cli-service-3.12.1.tgz"
   "version" "3.12.1"

@@ -157,15 +157,23 @@ export default ([
       {
         path: "operario/listadoPaquetes",
         name: "Gestión de Envíos",
-        component: listadoPaquetes,
-        props: {id: "listadoPaquetes"}
+        component: listadoPaquetes
       },
+      /*
       {
-        path: "operario/ResumenEnvio",
+        path: "/operario/ResumenEnvio/:envio",
         name: "Resumen de Envío",
         component: ResumenEnvio,
-        /*props: {id: "ResumenEnvio"}*/
+        props: true
       },
+      */
+      {
+        path: "/operario/ResumenEnvio",
+        name: "Resumen de Envío",
+        component: ResumenEnvio,
+        props: true// Pasar el objeto `envio` como prop
+      },
+      
       {
         path: "admin/rutas",
         name: "Gestión de Rutas",

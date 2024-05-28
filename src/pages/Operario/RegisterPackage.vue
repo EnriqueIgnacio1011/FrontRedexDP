@@ -21,18 +21,23 @@
           <div class="col-md-6">
             <div class="form-group">
               <label>Ciudad, País - Destino</label>
-              <select class="form-control" v-model="clienteDestino.ciudadPais">
+              <select class="form-control" v-model="clienteDestino.ciudadPais" required>
                 <option value="" disabled selected hidden>Seleccione una ciudad y país</option>
-                <option v-for="paisDestino in lpaisesDestino" :key="paisDestino.id" :value="paisDestino">
-                  {{ paisDestino.ciudad.nombre }}, {{ paisDestino.pais.nombre }}
+                <option v-for="paisDestino in lpaisesDestino" :key="paisDestino.id" :value="`${paisDestino.ciudad.nombre} - ${paisDestino.pais.nombre}`">
+                  {{ paisDestino.ciudad.nombre }} - {{ paisDestino.pais.nombre }}
                 </option>
               </select>
+               <!-- Mensaje de error -->
+              <div v-if="!clienteDestino.ciudadPais && formSubmitted" class="invalid-feedback">
+                Por favor, seleccione una ciudad y país.
+              </div>
             </div>
-
+            <!--
             <div class="form-group">
               <label>Descripción(opcional)</label>
               <input type="text" class="form-control" placeholder="Descripción" v-model="descripcionPaquete">
             </div>
+            -->
           </div>
         </div>
       </div>
@@ -122,6 +127,7 @@
 <script>
   import { BaseTable } from "@/components";
   import axios from 'axios';
+  //import { useToast } from 'vue-toastification';
   import NotificationTemplate from '../Notifications/NotificationTemplate';
   import NotificationTemplatePaqueteSuccess from '../Notifications/NotificationTemplatePaqueteSuccess';
   import NotificationTemplatePaqueteError from '../Notifications/NotificationTemplatePaqueteError';
@@ -136,10 +142,13 @@
     components: {
       BaseTable,
       listadoPaquetes,
-      ResumenEnvio,
+      ResumenEnvio
     },
     data() {
       return {
+        formSubmitted: false,
+        fechaEnvio: '',
+        horaEnvio: '',  
         clienteOrigen:{
           id:'',
           ciudadPais: '', /*Aqui se guardaría el valor, pero en paisOrigen y ciudadOrigen ya se guarda los valores que se encuentran por defecto*/
@@ -149,16 +158,16 @@
           numDniRuc:''
         },
         clienteDestino:{
-          id:'',
-          ciudadPais: '',
-          nombreCompleto: '',
-          email:'',
-          telefono:'',
-          numDniRuc:''
+          id:"",
+          ciudadPais: "",
+          nombreCompleto: "",
+          email:"",
+          telefono:"",
+          numDniRuc:""
         },
-        descripcionPaquete: '',
+        descripcionPaquete: "",
         cantidadPaquetes: '',
-        paisOrigen: '',
+        paisOrigen: "",
         ciudadOrigen:"",
         loading: true,
         error: '',
@@ -188,117 +197,10 @@
         this.error = "La geolocalización no está disponible en este navegador.";
         this.loading = false;
       }
-      /*
-      let vue = this;
       
-
-      var date = new Date();
-      var day = date.getDate();
-      var month = date.getMonth() + 1;
-      var year = date.getFullYear();
-      var hour = date.getUTCHours();
-      var min = date.getUTCMinutes();
-      console.log("Hora");
-      console.log(day.toString().slice(-2) + month.toString().slice(-2) + year.toString().slice(-2) + hour.toString().slice(-2) + min.toString().slice(-2));
-
-      vue.data_usuario.id = Authentication.getProfile().id;
-
-      axios.get(this.$store.state.appUri+'/usuarios/obtenerDatosSede/' + vue.data_usuario.id)
-      .then(function(response){
-        vue.data_usuario.sedeOrigen = response.data.sede.codigoOaci;
-        vue.data_usuario.pais = response.data.sede.pais.nombre;
-      }),
-
-      axios.get(this.$store.state.appUri+'/sedes/listarSedes')
-      .then(function(response){
-        vue.sedes = response.data;
-      }),
-      axios.get(this.$store.state.appUri+'/usuarios/listar')
-      .then(function(response){
-        vue.clientes = response.data;
-      }),
-      axios.get(this.$store.state.appUri+'/categorias/findAll')
-      .then(function(response){
-        vue.categorias = response.data;
-      })
-      */
     },
-/*
-    computed: {
-      isEmailValid() {
-        return this.reg.test(this.email);
-      },
-      emailValidationClass() {
-        if (this.email === '') {
-          return '';
-        }
-        return this.isEmailValid ? 'has-success' : 'has-error';
-      }
-    },
-*/
+
     methods:{
-      /*
-      filterClient:function(numeroDocumento){
-        let vue = this;
-        var lista = vue.clientes.filter(
-          function(cust){
-            return cust.numeroDocumento==numeroDocumento
-          }
-        )
-        vue.cliente = lista[0];
-      },
-      addItem(){
-
-        let date = new Date();
-        let day = date.getDate();
-        let month = date.getMonth() + 1;
-        let year = date.getFullYear();
-        let hour = date.getUTCHours();
-        let min = date.getUTCMinutes();
-
-        
-        console.log(day+month+year+hour+min);
-        if(this.categoria.id == null || this.paquete.descripcion == null || this.email == null){
-            this.notifyVue('top', 'center',4,NotificationTemplatePaqueteError);
-            return;
-        }
-
-        
-
-        var paquete = {
-          oaci_sede_origen:this.paquete.oaci_sede_origen,
-          oaci_sede_destino:this.paquete.oaci_sede_destino,
-          id_categoria:this.categoria.id,
-          descripcion:this.paquete.descripcion,
-          fecha_registro:"2020-05-18T08:34:00.000", // COLOCAR FECHA ACTUAL
-          estado:"EN_ALMACEN",
-          numeroDocumento:this.dniinput,
-          codigo:     this.paquete.oaci_sede_origen + "-" +
-                      year.toString()+month.toString()+day.toString()+"-"+
-                      hour.toString()+":"+min.toString()+"-"+
-                      this.oaci_sede_destino
-        }
-        var paqueteTabla = {
-          descripcion:this.paquete.descripcion,
-          categoria:this.categoria.descripcion          
-        }
-        this.table1.data.push(paqueteTabla);
-        this.paquete.push(paquete);
-        //console.log(this.paquete);
-        //console.log(this.categoria);
-      },
-      obtenerCategoria(categoria){
-          this.categoria = categoria;
-          //console.log(categoria);
-      },
-      obtenerCiudad(sede){
-        let vue = this;
-          vue.ciudad = sede.pais.ciudad;
-          vue.paquete.oaci_sede_origen = vue.data_usuario.sedeOrigen;
-          vue.paquete.oaci_sede_destino = sede.codigoOaci;
-          //console.log(this.ciudad);
-      },
-      */
       obtenerUbicacionActual(position){
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
@@ -309,6 +211,7 @@
           .then(data => {
             this.paisOrigen = data.countryName;
             this.ciudadOrigen = data.city;
+            this.clienteOrigen.ciudadPais = this.ciudadOrigen + " - " + this.paisOrigen;
             this.loading = false;
           })
           .catch(error => {
@@ -334,47 +237,28 @@
         }
         this.loading = false;
       },
-      /*
-      isPackageEmpty: function() {
-          return (this.table1.data.length == 0) ? this.notifyVue('top', 'center',4,NotificationTemplatePaqueteError) : 'has-error';
-      },
-      
-      notifyVue(verticalAlign, horizontalAlign,color,componente) {
-        //const color = 4;
-        //console.log(color);
-        this.$notify({
-          component: componente,
-          icon: "tim-icons icon-bell-55",
-          horizontalAlign: horizontalAlign,
-          verticalAlign: verticalAlign,
-          type: this.type[color],
-          timeout: 0
-        });
-      },
-      enviarPaquete(){
-        let vue = this;
-
-        if(this.table1.data.length == 0 || this.email==null || this.dniinput==null || this.cliente.nombreRazonSocial==null ){
-          this.notifyVue('top', 'center',4,NotificationTemplatePaqueteError);
-        }else{
-            axios.post(vue.$store.state.appUri+'/paquetes/insertarLista', vue.paquete)
-            .then(response => {})
-            .catch(e => {
-              vue.errors.push(e)
-            });
-            vue.paquete = [];
-            vue.table1.data = [];
-            this.notifyVue('top', 'center',2,NotificationTemplatePaqueteSuccess)
-        }
-      },
-      */
-      registrarEnvio() {
-        console.log('registrarEnvio llamado');
-        this.$router.push('ResumenEnvio');
-      },
       regresarAlListar(){
         console.log('listadoPaquetes llamado');
         this.$router.push('listadoPaquetes');
+      },
+      obtenerFechaHoraActual() {
+        const currentDate = new Date();
+
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+        const day = String(currentDate.getDate()).padStart(2, '0');
+
+        const formattedDate = `${year}${month}${day}`;
+
+        const hours = String(currentDate.getHours()).padStart(2, '0');
+        const minutes = String(currentDate.getMinutes()).padStart(2, '0');
+
+        const formattedTime = `${hours}:${minutes}`;
+
+        return {
+          fechaEnvio: formattedDate,
+          horaEnvio: formattedTime
+        };
       },
       /*
       {
@@ -391,23 +275,29 @@
 }
 */
       async registrarEnvio() {
+        const dateTime = this.obtenerFechaHoraActual();
+        this.fechaEnvio = dateTime.fechaEnvio;
+        this.horaEnvio = dateTime.horaEnvio;
+        this.formSubmitted = true;
         try {
           const payload = {
-            ciudadOrigen: this.clienteOrigen.ciudadPais,
-            ciudadDestino: this.clienteDestino.ciudadPais,
-            ciudadActual: this.clienteOrigen.ciudadPais,
-            //descripcionPaquete: this.descripcionPaquete,
+            ciudadOrigen: this.clienteOrigen.ciudadPais, // "Lima-Peru",
+            ciudadDestino: this.clienteDestino.ciudadPais, // "Brasilia-Brasil",
+            ciudadActual: this.clienteOrigen.ciudadPais, // "Lima-Peru",
+            fechaEnvio: this.fechaEnvio,
+            horaEnvio: this.horaEnvio,
+            idEnvio: "154",
             cantidadPaquetes: this.cantidadPaquetes
           };
 
           // Llamada a la API
-          const response = await axios.post('http://localhost/api/paquete/register', payload);
+          const response = await axios.post('http://localhost/api/paquete/register/showall', payload);
 
           // Suponiendo que la respuesta tiene un campo `success` para indicar éxito
           //if (response.data.success) {
-          if (response.data !== 0){
+          if (response.data.id !== 0){
             console.log('Envío registrado exitosamente:', response.data);
-            this.$toast.success('El envío se ha registrado exitosamente.');
+            //this.$toast.success('El envío se ha registrado exitosamente.');
             // Muestra una notificación de éxito
             /*
             this.$notify({
@@ -417,11 +307,19 @@
             });
             */
             // Navega a la página de resumen del envío
-            this.$router.push({ name: 'ResumenEnvio', params: { idEnvio: response.data } });
+            //this.$router.push({ name: 'Resumen de Envío', params: { idEnvio: response.data } });
+            /*
+            this.$router.push({ 
+                name: 'Resumen de Envío', 
+                props: { envio: response.data }
+            });*/
+
+            this.$router.push({ name: 'Resumen de Envío', params: { envio: response.data } });
+
           } else {
             console.error('Error en la respuesta:', response.data);
             // Muestra una notificación de error
-            this.$toast.error('Hubo un error al registrar el envío.');
+            //this.$toast.error('Hubo un error al registrar el envío.');
             /*
             this.$notify({
               component: NotificationTemplatePaqueteError,
@@ -433,7 +331,7 @@
         } catch (error) {
           console.error('Error al registrar el envío: ', error);
           // Muestra una notificación de error
-          this.$toast.error('Hubo un error al registrar el envío.');
+          //this.$toast.error('Hubo un error al registrar el envío.');
           /*
           this.$notify({
             component: NotificationTemplatePaqueteError,
@@ -443,9 +341,6 @@
           */
         }
       }
-
-    },
-    props: {
 
     }
   }
