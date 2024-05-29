@@ -11,9 +11,9 @@
         <!--sidebar-link to="/typography" :name="$t('sidebar.typography')" icon="tim-icons icon-align-center"/-->
         <!--sidebar-link to="/dashboard?enableRTL=true" :name="$t('sidebar.rtlSupport')" icon="tim-icons icon-world"/-->
         <sidebar-link v-if="toggle.gestionRutas" to="/admin/rutas" :name="$t('sidebar.rutas')" icon="tim-icons icon-bus-front-12"/>
-        <sidebar-link v-if="toggle.gestionSedes" to="/admin/sedes" :name="$t('sidebar.sedes')" icon="tim-icons icon-globe-2"/>
-        <sidebar-link v-if="toggle.gestionPaquetes" to="/operario/listadoPaquetes" :name="$t('sidebar.managePackage')" icon="tim-icons icon-app"/>
-        <sidebar-link v-if="toggle.listaPaquetes" to="/cliente/paquetes" :name="$t('sidebar.listarpaquetes')" icon="tim-icons icon-single-copy-04"/>
+        <sidebar-link v-if="toggle.gestionSedes" to="/admin/aeropuertos" :name="$t('Aeropuertos')" icon="tim-icons icon-globe-2"/>
+        <sidebar-link v-if="toggle.gestionPaquetes" to="/operario/listadoPaquetes" :name="$t('Gestión de Envíos')" icon="tim-icons icon-app"/>
+        <!--<sidebar-link v-if="toggle.listaPaquetes" to="/cliente/paquetes" :name="$t('sidebar.listarpaquetes')" icon="tim-icons icon-single-copy-04"/>-->
         <sidebar-link v-if="toggle.tracking" to="/cliente/tracking" :name="$t('sidebar.tracking')" icon="tim-icons icon-square-pin"/>
         <sidebar-link v-if="toggle.gestionUsuarios" to="/admin/usuarios" :name="$t('sidebar.usuarios')" icon="tim-icons icon-badge"/>      
         <sidebar-link v-if="toggle.gestionUsuariosGerente" to="/gerente/usuarios" :name="$t('sidebar.usuarios-gerente')" icon="tim-icons icon-badge"/>

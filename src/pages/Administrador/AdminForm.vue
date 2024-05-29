@@ -164,7 +164,7 @@
           
           break;
         case "sedes":
-          vue.title = "Gestión de Sedes";
+          vue.title = "Gestión de Aeropuertos";
           vue.titleAgregar = "Agregar archivo de sedes";
           vue.adminTable.columns = ['Codigo', 'Nombre', 'OACI', 'Locacion', 'Estado'];
           vue.uploadPath = vue.$store.state.appUri + "";

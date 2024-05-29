@@ -17,7 +17,6 @@ import listadoPaquetes from "@/pages/Operario/listadoPaquetes.vue";
 import ResumenEnvio from "@/pages/Operario/ResumenEnvio.vue";
 import Package from "@/pages/Package.vue";
 import RutasAdmin from "@/pages/Administrador/AdminForm.vue";
-import SedesAdmin from "@/pages/Administrador/AdminForm.vue";
 import ModificarSede from "@/pages/Administrador/ModificarSede.vue";
 import ModificarRuta from "@/pages/Administrador/ModificarRuta.vue";
 import UsuariosAdmin from "@/pages/Administrador/AdminForm.vue";
@@ -36,6 +35,7 @@ import Login from '@/pages/Login.vue';
 import Index from "@/pages/Index.vue";
 import MainNavbar from '@/layout/MainNavbar.vue';
 import MainFooter from '@/layout/MainFooter.vue';
+import Aeropuertos from '../pages/Administrador/Aeropuertos.vue';
 
 
 //const Dashboard = () => import(/* webpackChunkName: "dashboard" */"@/pages/Dashboard.vue");
@@ -181,10 +181,10 @@ export default ([
         props: {id: "rutas"}
       },
       {
-        path: "admin/sedes",
-        name: "Gestión de Sedes",
-        component: SedesAdmin,
-        props: {id: "sedes"}
+        path: "admin/aeropuertos",
+        name: "Gestión de Aeropuertos",
+        component: Aeropuertos,
+        props: {id: "aeropuertos"}
       },      
       {
         path: "admin/informacionSede/:idSede",
