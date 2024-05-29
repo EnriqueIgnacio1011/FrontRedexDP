@@ -23,7 +23,7 @@
               <label>Ciudad, País - Destino</label>
               <select class="form-control" v-model="clienteDestino.codigoOACI" required>
                 <option value="" disabled selected hidden>Seleccione una ciudad y país</option>
-                <option v-for="paisDestino in lpaisesDestino" :key="paisDestino.id" :value="`${paisDestino.nombreCiudad} - ${paisDestino.pais}`">
+                <option v-for="paisDestino in filteredPaisesDestino" :key="paisDestino.id" :value="`${paisDestino.codigoOACI}`">
                   {{ paisDestino.nombreCiudad }} - {{ paisDestino.pais }}
                 </option>
               </select>
@@ -173,6 +173,7 @@
         },
         descripcionPaquete: "",
         cantidadPaquetes: '',
+        estadoEnvio: 'En Almacén',
         paisOrigen: "",
         ciudadOrigen:"",
         loading: true,
@@ -209,14 +210,28 @@
       
       this.fetchPaisesDestino();
     },
-
+    computed: {
+      filteredPaisesDestino() {
+        return this.lpaisesDestino.filter(paisDestino => {
+                                                          return `${paisDestino.codigoOACI}` !== `SPIM`;
+                                                         });
+      }
+    },
     methods:{
       async fetchPaisesDestino() {
         try {
           const response = await axios.get('http://localhost/api/aeropuertos/getall');
       
-          this.lpaisesDestino = response.data;
-          console.log(this.lpaisesDestino.codigoOACI, response.data.pais, this.lpaisesDestino.ciudad);
+          //this.lpaisesDestino = response.data;
+          // Asumiendo que response.data es un arreglo de objetos con la estructura adecuada
+          
+          this.lpaisesDestino = response.data.sort((a, b) => {
+            // Si a.pais y b.pais son cadenas de texto, se pueden comparar directamente
+            if (a.pais < b.pais) return -1;
+            if (a.pais >= b.pais) return 1;
+            return 0;
+          });
+          
         } catch (error) {
           this.error = 'Error al cargar los datos';
           console.error(error);
@@ -303,13 +318,14 @@
         this.formSubmitted = true;
         try {
           const payload = {
-            ciudadOrigen: this.clienteOrigen.ciudadPais, // "Lima-Peru",
-            ciudadDestino: this.clienteDestino.ciudadPais, // "Brasilia-Brasil",
-            ciudadActual: this.clienteOrigen.ciudadPais, // "Lima-Peru",
+            ciudadOrigen: "SPIM", //this.clienteOrigen.ciudadPais, // "Lima-Peru",
+            ciudadDestino: this.clienteDestino.codigoOACI, // "Brasilia-Brasil",
+            ciudadActual: "SPIM",//this.clienteOrigen.ciudadPais, // "Lima-Peru",
             fechaEnvio: this.fechaEnvio,
             horaEnvio: this.horaEnvio,
             idEnvio: "154",
-            cantidadPaquetes: this.cantidadPaquetes
+            cantidadPaquetes: this.cantidadPaquetes,
+            estadoEnvio: this.estadoEnvio
           };
 
           // Llamada a la API

@@ -8,10 +8,10 @@
         <p><span class="highlighted-code">Código de Envío:</span> <span class="highlighted-code"> {{ envio.id }}</span></p>
         <p><strong>Ciudad, País - Origen:</strong> {{ envio.ciudadOrigen }}</p>
         <p><strong>Ciudad, País - Destino:</strong> {{ envio.ciudadDestino }}</p>
-        <p><strong>Fecha de Envío:</strong> 28-05-2024 </p>
+        <p><strong>Fecha de Envío:</strong> {{ formattedFechaEnvio }} </p>
         <p><strong>Hora de Envío:</strong> {{ envio.horaEnvio }}</p>
         <p><strong>Cantidad de Paquetes:</strong> {{ envio.cantidadPaquetes }} unidades</p>
-        <p><strong>Estado del Envío:</strong> En Almacén</p>
+        <p><strong>Estado del Envío:</strong> {{ envio.estadoEnvio }}</p>
         <!--<p><strong>Descripción:</strong> Documentos importantes</p>-->
       </div>
       <div class="section">
@@ -53,6 +53,14 @@ export default {
   data() {
     return {
       showModal: false,
+    }
+  },
+  computed: {
+    formattedFechaEnvio: function() {
+      // Descomponer la fecha en año, mes y día
+      const [year, month, day] = this.envio.fechaEnvio.split('-');
+      // Devolver la fecha en formato dd-mm-aaaa
+      return `${day}-${month}-${year}`;
     }
   },
   methods: {
