@@ -21,14 +21,14 @@
           <div class="col-md-6">
             <div class="form-group">
               <label>Ciudad, País - Destino</label>
-              <select class="form-control" v-model="clienteDestino.ciudadPais" required>
+              <select class="form-control" v-model="clienteDestino.codigoOACI" required>
                 <option value="" disabled selected hidden>Seleccione una ciudad y país</option>
-                <option v-for="paisDestino in lpaisesDestino" :key="paisDestino.id" :value="`${paisDestino.ciudad.nombre} - ${paisDestino.pais.nombre}`">
-                  {{ paisDestino.ciudad.nombre }} - {{ paisDestino.pais.nombre }}
+                <option v-for="paisDestino in lpaisesDestino" :key="paisDestino.id" :value="`${paisDestino.nombreCiudad} - ${paisDestino.pais}`">
+                  {{ paisDestino.nombreCiudad }} - {{ paisDestino.pais }}
                 </option>
               </select>
                <!-- Mensaje de error -->
-              <div v-if="!clienteDestino.ciudadPais && formSubmitted" class="invalid-feedback">
+              <div v-if="!clienteDestino.codigoOACI && formSubmitted" class="invalid-feedback">
                 Por favor, seleccione una ciudad y país.
               </div>
             </div>
@@ -64,9 +64,11 @@
             <div class="form-group">
               <label>Correo Electrónico</label>
               <input type="email" class="form-control" placeholder="email@email.com" v-model="clienteOrigen.email">
+              <!--
               <div v-if="email && !isEmailValid" class="invalid-feedback">
                 Por favor, ingrese un correo electrónico válido.
               </div>
+              -->
             </div>
             <div class="form-group">
               <label>Número de Teléfono</label>
@@ -97,9 +99,11 @@
             <div class="form-group">
               <label>Correo Electrónico</label>
               <input type="text" class="form-control" placeholder="Correo Electrónico" v-model="clienteDestino.email">
+              <!--
               <div v-if="email && !isEmailValid" class="invalid-feedback">
                 Por favor, ingrese un correo electrónico válido.
               </div>
+              -->
             </div>
             <div class="form-group">
               <label>Número de Teléfono</label>
@@ -152,6 +156,7 @@
         clienteOrigen:{
           id:'',
           ciudadPais: '', /*Aqui se guardaría el valor, pero en paisOrigen y ciudadOrigen ya se guarda los valores que se encuentran por defecto*/
+          codigoOACI: "",
           nombreCompleto: '',
           email:'',
           telefono:'',
@@ -160,6 +165,7 @@
         clienteDestino:{
           id:"",
           ciudadPais: "",
+          codigoOACI: "",
           nombreCompleto: "",
           email:"",
           telefono:"",
@@ -172,12 +178,15 @@
         loading: true,
         error: '',
         selectedSede: "", // Inicializa como cadena vacía
+        /*
         lpaisesDestino: [
           { id: 1, pais: { nombre: 'Perú' }, ciudad: { nombre: 'Lima' } },
           { id: 2, pais: { nombre: 'Argentina' }, ciudad: { nombre: 'Buenos Aires' } },
           { id: 3, pais: { nombre: 'Chile' }, ciudad: { nombre: 'Santiago' } }
           // Agrega más paises con ciudades según sea necesario
         ],
+        */
+        lpaisesDestino: [],
         reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
 
         type: ["", "info", "success", "warning", "danger"],
@@ -198,9 +207,22 @@
         this.loading = false;
       }
       
+      this.fetchPaisesDestino();
     },
 
     methods:{
+      async fetchPaisesDestino() {
+        try {
+          const response = await axios.get('http://localhost/api/aeropuertos/getall');
+      
+          this.lpaisesDestino = response.data;
+          console.log(this.lpaisesDestino.codigoOACI, response.data.pais, this.lpaisesDestino.ciudad);
+        } catch (error) {
+          this.error = 'Error al cargar los datos';
+          console.error(error);
+        }
+      },
+
       obtenerUbicacionActual(position){
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
