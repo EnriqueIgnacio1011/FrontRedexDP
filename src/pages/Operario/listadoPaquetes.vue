@@ -39,14 +39,16 @@ export default {
       searchword: '',
       
       tableColumns: [
-        { text: 'Código de envío', value: 'codigoEnvio' },
-        { text: 'Estado', value: 'estado' },
-        { text: 'Tiempo transcurrido', value: 'tiempoTranscurrido' },
-        { text: 'Origen', value: 'origen' },
-        { text: 'Destino', value: 'destino' },
-        { text: 'Fecha y hora envío', value: 'fechaEnvio' },
-        { text: 'Fecha y hora llegada', value: 'fechaLlegada' }
+        { text: 'Código de envío', value: 'id' },
+        { text: 'Estado', value: 'estadoEnvio' },
+        //{ text: 'Tiempo transcurrido', value: 'tiempoTranscurrido' },
+        { text: 'Origen', value: 'ciudadOrigen' },
+        { text: 'Destino', value: 'ciudadDestino' },
+        //{ text: 'Fecha y hora envío', value: 'fechaEnvio' + 'horaEnvio' }
+        { text: 'Fecha y hora envío', value: 'fechaEnvio' }
       ],
+      tableData: [],
+      /*
       tableData: [
         { codigoEnvio: 'FAS4445S', 
           estado: 'En camino', 
@@ -68,6 +70,7 @@ export default {
         // más datos aquí...
       ],   
 
+      */
 /*
       --> JSON
       {
@@ -132,9 +135,9 @@ export default {
   mounted() {
     // inicializar los datos filtrados
     console.log('Página actual:', this.data);
-    this.filteredData = this.tableData;
+    //this.filteredData = this.tableData;
     // Llama a fetchData() cuando el componente se monta para cargar los datos
-    //this.fetchDataListaEnvios();
+    this.fetchDataListaEnvios();
   }
 };
 </script>
