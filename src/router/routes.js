@@ -16,7 +16,6 @@ import TableList from "@/pages/TableList.vue";
 import listadoPaquetes from "@/pages/Operario/listadoPaquetes.vue";
 import ResumenEnvio from "@/pages/Operario/ResumenEnvio.vue";
 import Package from "@/pages/Package.vue";
-import RutasAdmin from "@/pages/Administrador/AdminForm.vue";
 import ModificarSede from "@/pages/Administrador/ModificarSede.vue";
 import ModificarRuta from "@/pages/Administrador/ModificarRuta.vue";
 import UsuariosAdmin from "@/pages/Administrador/AdminForm.vue";
@@ -36,6 +35,7 @@ import Index from "@/pages/Index.vue";
 import MainNavbar from '@/layout/MainNavbar.vue';
 import MainFooter from '@/layout/MainFooter.vue';
 import Aeropuertos from '../pages/Administrador/Aeropuertos.vue';
+import Aviones from "@/pages/Administrador/Aviones.vue";
 
 
 //const Dashboard = () => import(/* webpackChunkName: "dashboard" */"@/pages/Dashboard.vue");
@@ -159,14 +159,6 @@ export default ([
         name: "Gestión de Envíos",
         component: listadoPaquetes
       },
-      /*
-      {
-        path: "/operario/ResumenEnvio/:envio",
-        name: "Resumen de Envío",
-        component: ResumenEnvio,
-        props: true
-      },
-      */
       {
         path: "/operario/ResumenEnvio",
         name: "Resumen de Envío",
@@ -175,10 +167,10 @@ export default ([
       },
       
       {
-        path: "admin/rutas",
-        name: "Gestión de Rutas",
-        component: RutasAdmin,
-        props: {id: "rutas"}
+        path: "admin/aviones",
+        name: "Gestión de Aviones",
+        component: Aviones,
+        props: {id: "aviones"}
       },
       {
         path: "admin/aeropuertos",
